@@ -1,0 +1,22 @@
+{
+    "name": "UnityTemplate.Domain",
+    "rootNamespace": "UnityTemplate.Domain",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Backport.dll",
+        "Extensions.dll",
+        "GameKernel.dll",
+        "MasterMemory.dll",
+        "MessagePack.dll",
+        "MessagePack.Annotations.dll",
+        "Microsoft.NET.StringTools.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

@@ -1,0 +1,20 @@
+{
+    "name": "UnityTemplate.Infrastructure",
+    "rootNamespace": "UnityTemplate.Infrastructure",
+    "references": [
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:9910c5ade477f724fa5771cefbddc065",
+        "GUID:20e0bb8aae008ac439152c45daf5a9d9"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "LocalPrefs.Core.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

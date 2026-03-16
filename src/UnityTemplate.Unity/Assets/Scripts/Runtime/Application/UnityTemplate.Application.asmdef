@@ -1,0 +1,24 @@
+{
+    "name": "UnityTemplate.Application",
+    "rootNamespace": "UnityTemplate.Application",
+    "references": [
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:5e7cbbcb25d06ff4180de82516e6dac0",
+        "GUID:9910c5ade477f724fa5771cefbddc065"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Backport.dll",
+        "Extensions.dll",
+        "GameKernel.dll",
+        "MasterMemory.dll",
+        "MessagePack.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}
