@@ -36,8 +36,16 @@ namespace UnityTemplate.Application.Interfaces
         /// <param name="cancellationToken">キャンセルトークン.</param>
         UniTask CrossFadeBgmAsync(string address, float volume, bool loop = true, CancellationToken cancellationToken = default);
 
+        /// <summary>
+        /// BGMの音量を更新する.
+        /// </summary>
+        /// <param name="actualVolume">Bgm音量.</param>
         void UpdateBgmVolume(float actualVolume);
 
+        /// <summary>
+        /// SEの音量を更新する.
+        /// </summary>
+        /// <param name="actualVolume">Se音量.</param>
         void UpdateSeVolume(float actualVolume);
     }
 }

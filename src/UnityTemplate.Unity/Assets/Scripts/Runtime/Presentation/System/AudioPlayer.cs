@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityTemplate.Application.Interfaces;
 
-namespace UnityTemplate.Presentation.Runtime.Presentation.System
+namespace UnityTemplate.Presentation.System
 {
     public class AudioPlayer : IAudioPlayer
     {
@@ -24,11 +24,10 @@ namespace UnityTemplate.Presentation.Runtime.Presentation.System
         public readonly TimeSpan FadeDuration = TimeSpan.FromSeconds(3f);
 
         /// <summary>
-        /// Initialize a new instance of <see cref="AudioPlayerCore"/>.
+        /// Initialize a new instance of <see cref="AudioPlayer"/>.
         /// </summary>
         /// <param name="root"></param>
         /// <param name="bgmChannelCount"></param>
-        /// <param name="useVoice"></param>
         /// <param name="bgmRegistry"></param>
         public AudioPlayer(GameObject root, uint bgmChannelCount = 3, AssetsRegistry? bgmRegistry = null)
         {

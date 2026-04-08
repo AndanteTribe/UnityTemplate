@@ -19,6 +19,10 @@ namespace UnityTemplate.Presentation.UI.Settings
 
         private void Start()
         {
+            _masterVolumeSlider.value = _audioVolumeService.GetMasterVolume();
+            _bgmVolumeSlider.value = _audioVolumeService.GetBgmVolume();
+            _seVolumeSlider.value = _audioVolumeService.GetSeVolume();
+
             _masterVolumeSlider.onValueChanged.AddListener(volume => _audioVolumeService.SetMasterVolume(volume));
             _bgmVolumeSlider.onValueChanged.AddListener(volume => _audioVolumeService.SetBgmVolume(volume));
             _seVolumeSlider.onValueChanged.AddListener(volume => _audioVolumeService.SetSeVolume(volume));
