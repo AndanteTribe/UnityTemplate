@@ -4,8 +4,8 @@ using UnityTemplate.Domain.Entities;
 namespace UnityTemplate.Application.Interfaces
 {
     // ロードは初期化でやればいいので、セーブだけ.
-    public interface IAudioSettingsRepository
+    public interface IAudioVolumeRepository
     {
-        UniTask SaveAsync(AudioSettings entity);
+        UniTask SaveAsync(AudioVolumeEntity entity);
     }
 }
