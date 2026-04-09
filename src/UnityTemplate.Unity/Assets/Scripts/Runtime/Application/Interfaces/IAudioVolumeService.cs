@@ -10,6 +10,10 @@ namespace UnityTemplate.Application.Interfaces
 
         float GetSeVolume();
 
+        float GetFinalBgmVolume();
+
+        float GetFinalSeVolume();
+
         void SetMasterVolume(float volume);
 
         void SetBgmVolume(float volume);

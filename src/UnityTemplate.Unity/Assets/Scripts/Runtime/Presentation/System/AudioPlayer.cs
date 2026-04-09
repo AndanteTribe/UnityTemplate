@@ -10,7 +10,7 @@ using UnityTemplate.Application.Interfaces;
 
 namespace UnityTemplate.Presentation.System
 {
-    public class AudioPlayer : IAudioService
+    public class AudioPlayer : IAudioService, IAudioVolumeController
     {
         private readonly AudioSource[] _allChannels;
         private readonly AssetsRegistry _bgmRegistry;

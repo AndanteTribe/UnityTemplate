@@ -11,6 +11,9 @@ namespace UnityTemplate.Presentation.UI.Settings
         [Inject]
         private IAudioVolumeService _audioVolumeService;
 
+        [Inject]
+        private IAudioVolumeController _audioVolumeController;
+
         [SerializeField]
         private Slider _masterVolumeSlider;
         [SerializeField]
@@ -24,14 +27,32 @@ namespace UnityTemplate.Presentation.UI.Settings
             _bgmVolumeSlider.value = _audioVolumeService.GetBgmVolume();
             _seVolumeSlider.value = _audioVolumeService.GetSeVolume();
 
-            _masterVolumeSlider.onValueChanged.AddListener(volume => _audioVolumeService.SetMasterVolume(volume));
-            _bgmVolumeSlider.onValueChanged.AddListener(volume => _audioVolumeService.SetBgmVolume(volume));
-            _seVolumeSlider.onValueChanged.AddListener(volume => _audioVolumeService.SetSeVolume(volume));
+            _masterVolumeSlider.onValueChanged.AddListener(volume =>
+            {
+                _audioVolumeService.SetMasterVolume(volume);
+                ApplyVolumesToAudioPlayer();
+            });
+            _bgmVolumeSlider.onValueChanged.AddListener(volume =>
+            {
+                _audioVolumeService.SetBgmVolume(volume);
+                ApplyVolumesToAudioPlayer();
+            });
+            _seVolumeSlider.onValueChanged.AddListener(volume =>
+            {
+                _audioVolumeService.SetSeVolume(volume);
+                ApplyVolumesToAudioPlayer();
+            });
         }
 
         private void OnDestroy()
         {
             _audioVolumeService.SaveAsync().Forget();
+        }
+
+        private void ApplyVolumesToAudioPlayer()
+        {
+            _audioVolumeController.UpdateBgmVolume(_audioVolumeService.GetFinalBgmVolume());
+            _audioVolumeController.UpdateSeVolume(_audioVolumeService.GetFinalSeVolume());
         }
     }
 }
