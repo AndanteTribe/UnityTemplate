@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+
 namespace UnityTemplate.Application.Interfaces
 {
     public interface IAudioVolumeService
@@ -13,5 +15,7 @@ namespace UnityTemplate.Application.Interfaces
         void SetBgmVolume(float volume);
 
         void SetSeVolume(float volume);
+
+        UniTask SaveAsync();
     }
 }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityTemplate.Application.Interfaces;
 using VContainer;
@@ -8,7 +9,7 @@ namespace UnityTemplate.Presentation.UI.Settings
     public class AudioVolumePresenter : MonoBehaviour
     {
         [Inject]
-        private readonly IAudioVolumeService _audioVolumeService;
+        private IAudioVolumeService _audioVolumeService;
 
         [SerializeField]
         private Slider _masterVolumeSlider;
@@ -26,6 +27,11 @@ namespace UnityTemplate.Presentation.UI.Settings
             _masterVolumeSlider.onValueChanged.AddListener(volume => _audioVolumeService.SetMasterVolume(volume));
             _bgmVolumeSlider.onValueChanged.AddListener(volume => _audioVolumeService.SetBgmVolume(volume));
             _seVolumeSlider.onValueChanged.AddListener(volume => _audioVolumeService.SetSeVolume(volume));
+        }
+
+        private void OnDestroy()
+        {
+            _audioVolumeService.SaveAsync().Forget();
         }
     }
 }

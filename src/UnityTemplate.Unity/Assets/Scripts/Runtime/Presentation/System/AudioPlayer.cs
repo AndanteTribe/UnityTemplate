@@ -10,7 +10,7 @@ using UnityTemplate.Application.Interfaces;
 
 namespace UnityTemplate.Presentation.System
 {
-    public class AudioPlayer : IAudioPlayer
+    public class AudioPlayer : IAudioService
     {
         private readonly AudioSource[] _allChannels;
         private readonly AssetsRegistry _bgmRegistry;
@@ -20,6 +20,9 @@ namespace UnityTemplate.Presentation.System
         private AudioSource SeChannel => _allChannels[0];
 
         private int _currentBgmChannelIndex = -1;
+
+        private float _currentBgmVolume = 1f;
+        private float _currentSeVolume = 1f;
 
         public readonly TimeSpan FadeDuration = TimeSpan.FromSeconds(3f);
 
@@ -57,7 +60,13 @@ namespace UnityTemplate.Presentation.System
         }
 
         /// <inheritdoc/>
-        public async UniTaskVoid PlayBgmAsync(string address, float volume, bool loop = true, CancellationToken cancellationToken = default)
+        public void PlayBgm(string address, bool loop = true)
+        {
+            PlayBgmAsync(address, loop).Forget();
+        }
+
+        /// <inheritdoc/>
+        public async UniTaskVoid PlayBgmAsync(string address, bool loop = true, CancellationToken cancellationToken = default)
         {
             var clip = await _bgmRegistry.LoadAsync<AudioClip>(address, cancellationToken);
 
@@ -65,7 +74,7 @@ namespace UnityTemplate.Presentation.System
             channel.Stop();
             channel.clip = clip;
             channel.loop = loop;
-            channel.volume = volume;
+            channel.volume = _currentBgmVolume;
             channel.Play();
         }
 
@@ -86,10 +95,11 @@ namespace UnityTemplate.Presentation.System
         }
 
         /// <inheritdoc/>
-        public async UniTask PlaySeAsync(string address, float volume, CancellationToken cancellationToken = default)
+        public async UniTask PlaySeAsync(string address, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             var channel = SeChannel;
+            channel.volume = _currentSeVolume;
             var handle = Addressables.LoadAssetAsync<AudioClip>(address);
 
             try
@@ -116,7 +126,7 @@ namespace UnityTemplate.Presentation.System
         }
 
         /// <inheritdoc/>
-        public async UniTask CrossFadeBgmAsync(string address, float volume, bool loop = true, CancellationToken cancellationToken = default)
+        public async UniTask CrossFadeBgmAsync(string address, bool loop = true, CancellationToken cancellationToken = default)
         {
             var clip = await _bgmRegistry.LoadAsync<AudioClip>(address, cancellationToken);
 
@@ -135,8 +145,8 @@ namespace UnityTemplate.Presentation.System
                 {
                     // Fade in from 0.0 to PI/2
                     await LMotion.Create(0.0f, 1.0f, (float)FadeDuration.TotalSeconds)
-                        .Bind((self: this, channel, volume), static (rate, args) =>
-                            args.self.ApplyBgmVolume(args.channel, args.volume, Mathf.Sin(Mathf.PI * 0.5f * rate)))
+                        .Bind((self: this, channel), static (rate, args) =>
+                            args.self.ApplyBgmVolume(args.channel, args.self._currentBgmVolume, Mathf.Sin(Mathf.PI * 0.5f * rate)))
                         .ToUniTask(cancellationToken);
                 }
                 finally
@@ -161,15 +171,15 @@ namespace UnityTemplate.Presentation.System
             try
             {
                 await LMotion.Create(0.0f, 1.0f, (float)FadeDuration.TotalSeconds)
-                    .Bind((self: this, cur: currentChannel, next: nextChannel, volume), static (rate, args) =>
+                    .Bind((self: this, cur: currentChannel, next: nextChannel), static (rate, args) =>
                     {
                         // NOTE:
                         // Using Sin/Cos curves for fading keeps the perceived volume constant throughout.
                         // A linear fade would cause a momentary volume dip at the midpoint of the fade duration.
-                        var (self, cur, next, volume) = args;
+                        var (self, cur, next) = args;
                         var f = Mathf.PI * 0.5f * rate;
-                        self.ApplyBgmVolume(cur, volume, Mathf.Cos(f));
-                        self.ApplyBgmVolume(next, volume, Mathf.Sin(f));
+                        self.ApplyBgmVolume(cur, self._currentBgmVolume, Mathf.Cos(f));
+                        self.ApplyBgmVolume(next, self._currentBgmVolume, Mathf.Sin(f));
                     })
                     .ToUniTask(cancellationToken);
             }
@@ -184,21 +194,23 @@ namespace UnityTemplate.Presentation.System
         }
 
         /// <inheritdoc/>
-        public void UpdateBgmVolume(float actualVolume)
+        public void UpdateBgmVolume(float finalVolume)
         {
+            _currentBgmVolume = finalVolume;
             foreach (var channel in BgmChannels)
             {
                 if (!_excludeVolumeManagementChannels.Contains(channel))
                 {
-                    channel.volume = actualVolume;
+                    channel.volume = finalVolume;
                 }
             }
         }
 
         /// <inheritdoc/>
-        public void UpdateSeVolume(float actualVolume)
+        public void UpdateSeVolume(float finalVolume)
         {
-            SeChannel.volume = actualVolume;
+            _currentSeVolume = finalVolume;
+            SeChannel.volume = finalVolume;
         }
 
         private AudioSource GetAvailableBgmChannel() =>
