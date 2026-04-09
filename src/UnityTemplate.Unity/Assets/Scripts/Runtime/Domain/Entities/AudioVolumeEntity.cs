@@ -32,9 +32,9 @@ namespace UnityTemplate.Domain.Entities
         }
 
         [IgnoreMember]
-        public float ActualBgmVolume => BgmVolume * MasterVolume;
+        public float FinalBgmVolume => BgmVolume * MasterVolume;
 
         [IgnoreMember]
-        public float ActualSeVolume => SeVolume * MasterVolume;
+        public float FinalSeVolume => SeVolume * MasterVolume;
     }
 }
