@@ -1,5 +1,3 @@
-using UnityTemplate.Domain.Entities;
-
 namespace UnityTemplate.Application.Interfaces
 {
     public interface IAudioVolumeService

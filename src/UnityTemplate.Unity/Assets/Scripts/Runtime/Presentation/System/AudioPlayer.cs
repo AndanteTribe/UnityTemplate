@@ -19,7 +19,7 @@ namespace UnityTemplate.Presentation.System
         private ReadOnlySpan<AudioSource> BgmChannels => _allChannels.AsSpan(1);
         private AudioSource SeChannel => _allChannels[0];
 
-        private int _currentBgmChannelIndex = 1;
+        private int _currentBgmChannelIndex = -1;
 
         public readonly TimeSpan FadeDuration = TimeSpan.FromSeconds(3f);
 
@@ -31,8 +31,8 @@ namespace UnityTemplate.Presentation.System
         /// <param name="bgmRegistry"></param>
         public AudioPlayer(GameObject root, uint bgmChannelCount = 3, AssetsRegistry? bgmRegistry = null)
         {
-            _allChannels = root.GetComponents<AudioSource>();
-            var existingChannels = _allChannels.AsSpan();
+            var allChannels = root.GetComponents<AudioSource>();
+            var existingChannels = allChannels.AsSpan();
 
             var allChannelCount = bgmChannelCount + 1; // BGM + SE
             if (existingChannels.Length < allChannelCount)
@@ -49,8 +49,9 @@ namespace UnityTemplate.Presentation.System
                     channel.loop = false;
                     channel.playOnAwake = false;
                 }
-                _allChannels = channels;
+                allChannels = channels;
             }
+            _allChannels = allChannels;
 
             _bgmRegistry = bgmRegistry ?? new AssetsRegistry();
         }
@@ -93,7 +94,7 @@ namespace UnityTemplate.Presentation.System
 
             try
             {
-                var result = await handle.ToUniTask(cancellationToken: cancellationToken, autoReleaseWhenCanceled: true);
+                var result = await handle.ToUniTask(cancellationToken: cancellationToken);
                 if (result == null)
                 {
 #if UNITY_EDITOR || DEVELOPMENT_BUILD

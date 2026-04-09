@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using UnityTemplate.Application.Interfaces;
 using UnityTemplate.Domain.Entities;
 
-namespace UnityTemplate.Application.Runtime.Application
+namespace UnityTemplate.Application
 {
     public class AudioService : IAudioService
     {
