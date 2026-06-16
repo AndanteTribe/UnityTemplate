@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityTemplate.Application.UseCases;
+using UnityTemplate.Application.Interfaces;
 using VContainer;
 
 namespace UnityTemplate.Presentation.UI.Settings
@@ -8,7 +8,7 @@ namespace UnityTemplate.Presentation.UI.Settings
     public class AudioVolumePresenter : MonoBehaviour
     {
         [Inject]
-        private AudioVolumeUseCase _useCase;
+        private readonly IAudioVolumeService _audioVolumeService;
 
         [SerializeField]
         private Slider _masterVolumeSlider;
@@ -19,9 +19,13 @@ namespace UnityTemplate.Presentation.UI.Settings
 
         private void Start()
         {
-            _masterVolumeSlider.onValueChanged.AddListener(volume => _useCase.Execute(AudioVolumeUseCase.VolumeType.Master, volume));
-            _bgmVolumeSlider.onValueChanged.AddListener(volume => _useCase.Execute(AudioVolumeUseCase.VolumeType.Bgm, volume));
-            _seVolumeSlider.onValueChanged.AddListener(volume => _useCase.Execute(AudioVolumeUseCase.VolumeType.Se, volume));
+            _masterVolumeSlider.value = _audioVolumeService.GetMasterVolume();
+            _bgmVolumeSlider.value = _audioVolumeService.GetBgmVolume();
+            _seVolumeSlider.value = _audioVolumeService.GetSeVolume();
+
+            _masterVolumeSlider.onValueChanged.AddListener(volume => _audioVolumeService.SetMasterVolume(volume));
+            _bgmVolumeSlider.onValueChanged.AddListener(volume => _audioVolumeService.SetBgmVolume(volume));
+            _seVolumeSlider.onValueChanged.AddListener(volume => _audioVolumeService.SetSeVolume(volume));
         }
     }
 }
